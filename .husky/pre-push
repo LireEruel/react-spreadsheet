@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+
+# 빌드 실행
+pnpm build
+
+# 빌드 종료 코드 
+BUILD_EXIT_CODE=$?
+
+# 빌드 성공여부 확인
+if [ $BUILD_EXIT_CODE -ne 0 ]; then
+  echo "Pre push error: 빌드를 실패하여 push를 중단합니다."
+  exit 1
+fi
