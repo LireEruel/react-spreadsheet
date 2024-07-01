@@ -16,6 +16,7 @@ export const ColumnHeaderContainer = styled.div`
   background: white;
   z-index: 1;
   width: 100%;
+  box-sizing: border-box;
 `;
 
 export const RowContainer = styled.div`
@@ -29,6 +30,7 @@ export const Row = styled.div`
 
 export const RowHeaderContainer = styled.div`
   width: 50px;
+  height: 30px;
   background-color: #f9f9f9;
   text-align: center;
   line-height: 30px;
@@ -37,6 +39,7 @@ export const RowHeaderContainer = styled.div`
   background: white;
   flex-shrink: 0;
   border: 1px solid gray;
+  box-sizing: border-box;
 `;
 
 export const ColumnHeaderItem = styled.div`
@@ -46,12 +49,31 @@ export const ColumnHeaderItem = styled.div`
   flex-shrink: 0; /* Flex 아이템이 축소되지 않도록 설정 */
   border: 1px solid gray;
   padding: 3px 0;
+  box-sizing: border-box;
 `;
 
-export const CellContainer = styled.input`
+export const EditingCell = styled.input`
   width: 100px;
   height: 30px;
-  border: 1px solid #ccc;
+  border: 3px solid darkblue;
   flex-shrink: 0; /* Flex 아이템이 축소되지 않도록 설정 */
   padding: 0;
+  &:focus {
+    outline: none; /* 기본 outline 제거 */
+  }
+  box-sizing: border-box;
+`;
+
+type CellContainerProps = {
+  selected: boolean;
+};
+
+export const CellContainer = styled.div<CellContainerProps>`
+  width: 100px;
+  height: 30px;
+  border: ${(props) => (props.selected ? "3px" : "1px")} solid
+    ${(props) => (props.selected ? "blue" : "gray")};
+  flex-shrink: 0; /* Flex 아이템이 축소되지 않도록 설정 */
+  padding: 0;
+  box-sizing: border-box;
 `;
