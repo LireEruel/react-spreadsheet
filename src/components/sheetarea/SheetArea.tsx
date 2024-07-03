@@ -10,46 +10,66 @@ import {
 import { useCallback, useState } from "react";
 
 const SheetArea = () => {
-  const rows = Array.from({ length: 100 }, (_, i) => i + 1);
-  const columns = Array.from({ length: 26 }, (_, i) =>
-    String.fromCharCode(65 + i)
-  );
   const [selectedCell, setSelectedCell] = useState("A1");
   const [isEditing, setIsEditing] = useState(false);
-  const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
-    const { key, ctrlKey, altKey, metaKey } = event;
-    // 예외 키 필터링
-    const isSpecialKey =
-      ctrlKey || altKey || metaKey || (key >= "F1" && key <= "F12");
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent) => {
+      const { key, ctrlKey, altKey, metaKey } = event;
+      // 예외 키 필터링
+      const isSpecialKey =
+        ctrlKey || altKey || metaKey || (key >= "F1" && key <= "F12");
 
-    if (!isSpecialKey) {
-      setIsEditing(true);
-    }
-  }, []);
+      if (!isEditing && !isSpecialKey) {
+        setIsEditing(true);
+      }
+    },
+    [isEditing]
+  );
+
+  const [sheetData, setSheetData] = useState(
+    Array.from(Array(50), () => Array(26).fill(""))
+  );
 
   const onSelectCell = useCallback((key: string) => {
     setSelectedCell(key);
     setIsEditing(false);
   }, []);
 
+  const handleChangedCell = (
+    { x, y }: { x: number; y: number },
+    value: string
+  ) => {
+    const newSheetData = sheetData.map((row, rowIndex) => {
+      if (rowIndex === y) {
+        row[x] = value;
+      }
+      return row;
+    });
+    setSheetData(newSheetData);
+  };
+
   return (
     <SheetAreaContainer tabIndex={0} onKeyDown={(e) => handleKeyDown(e)}>
       <ColumnHeaderContainer>
-        <ColumnHeader columns={columns} />
+        <ColumnHeader />
       </ColumnHeaderContainer>
       <RowContainer>
-        {rows.map((row) => (
-          <Row key={row}>
-            <RowHeader row={row} />
-            {columns.map((col) => (
+        {sheetData.map((row, rowIndex) => (
+          <Row key={rowIndex}>
+            <RowHeader row={rowIndex} />
+            {row.map((data, colIndex) => (
               <Cell
-                key={`${col}${row}`}
-                x={col}
-                y={row}
-                selected={selectedCell === `${col}${row}`}
-                isEditing={selectedCell === `${col}${row}` && isEditing}
+                key={`${colIndex}${rowIndex}`}
+                x={colIndex}
+                y={rowIndex}
+                selected={selectedCell === `${colIndex}${rowIndex}`}
+                isEditing={
+                  selectedCell === `${colIndex}${rowIndex}` && isEditing
+                }
                 selectCell={onSelectCell}
                 setIsEditing={setIsEditing}
+                value={data}
+                onChangedValue={handleChangedCell}
               />
             ))}
           </Row>

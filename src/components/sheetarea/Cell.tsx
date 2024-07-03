@@ -1,18 +1,28 @@
-import { useState, useCallback, memo } from "react";
+import { useCallback, memo } from "react";
 import { EditingCell, CellContainer } from "./SheetAreaStyles";
 
 type CellProps = {
-  x: string;
+  x: number;
   y: number;
   selected: boolean;
   isEditing: boolean;
   selectCell: (key: string) => void;
   setIsEditing: (value: boolean) => void;
+  value: string;
+  onChangedValue: ({ x, y }: { x: number; y: number }, value: string) => void;
 };
 
 export const Cell = memo(
-  ({ x, y, selected, isEditing, selectCell, setIsEditing }: CellProps) => {
-    const [value, setValue] = useState("");
+  ({
+    x,
+    y,
+    selected,
+    isEditing,
+    selectCell,
+    setIsEditing,
+    value,
+    onChangedValue,
+  }: CellProps) => {
     const onClickCell = useCallback(() => {
       selectCell(`${x}${y}`);
     }, [selectCell, x, y]);
@@ -21,13 +31,13 @@ export const Cell = memo(
       setIsEditing(true);
     }, [selectCell, setIsEditing, x, y]);
 
+    const handleEditCell = (e: React.ChangeEvent<HTMLInputElement>) => {
+      onChangedValue({ x, y }, e.target.value);
+    };
+
     if (isEditing) {
       return (
-        <EditingCell
-          type="text"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-        />
+        <EditingCell type="text" value={value} onChange={handleEditCell} />
       );
     } else {
       return (
