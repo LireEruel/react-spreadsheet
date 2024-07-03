@@ -9,7 +9,11 @@ import {
 } from "./SheetAreaStyles";
 import { useCallback, useState } from "react";
 
-const SheetArea = () => {
+type SheetAreaProp = {
+  sheetData: string[][];
+  setSheetData: (value: string[][]) => void;
+};
+const SheetArea = ({ sheetData, setSheetData }: SheetAreaProp) => {
   const [selectedCell, setSelectedCell] = useState("A1");
   const [isEditing, setIsEditing] = useState(false);
   const handleKeyDown = useCallback(
@@ -24,10 +28,6 @@ const SheetArea = () => {
       }
     },
     [isEditing]
-  );
-
-  const [sheetData, setSheetData] = useState(
-    Array.from(Array(50), () => Array(26).fill(""))
   );
 
   const onSelectCell = useCallback((key: string) => {
@@ -54,26 +54,28 @@ const SheetArea = () => {
         <ColumnHeader />
       </ColumnHeaderContainer>
       <RowContainer>
-        {sheetData.map((row, rowIndex) => (
-          <Row key={rowIndex}>
-            <RowHeader row={rowIndex} />
-            {row.map((data, colIndex) => (
-              <Cell
-                key={`${colIndex}${rowIndex}`}
-                x={colIndex}
-                y={rowIndex}
-                selected={selectedCell === `${colIndex}${rowIndex}`}
-                isEditing={
-                  selectedCell === `${colIndex}${rowIndex}` && isEditing
-                }
-                selectCell={onSelectCell}
-                setIsEditing={setIsEditing}
-                value={data}
-                onChangedValue={handleChangedCell}
-              />
-            ))}
-          </Row>
-        ))}
+        {sheetData.map((row, rowIndex) =>
+          rowIndex == 0 ? null : (
+            <Row key={rowIndex}>
+              <RowHeader row={rowIndex} />
+              {row.map((data, colIndex) => (
+                <Cell
+                  key={`${colIndex}${rowIndex}`}
+                  x={colIndex}
+                  y={rowIndex}
+                  selected={selectedCell === `${colIndex}${rowIndex}`}
+                  isEditing={
+                    selectedCell === `${colIndex}${rowIndex}` && isEditing
+                  }
+                  selectCell={onSelectCell}
+                  setIsEditing={setIsEditing}
+                  value={data}
+                  onChangedValue={handleChangedCell}
+                />
+              ))}
+            </Row>
+          )
+        )}
       </RowContainer>
     </SheetAreaContainer>
   );
