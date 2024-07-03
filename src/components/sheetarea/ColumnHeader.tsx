@@ -1,10 +1,11 @@
+import { memo } from "react";
 import { RowHeaderContainer, ColumnHeaderItem } from "./SheetAreaStyles";
 
 type ColumnHeader = {
   columns: string[];
 };
 
-const ColumnHeader = ({ columns }: ColumnHeader) => {
+const ColumnHeader = memo(({ columns }: ColumnHeader) => {
   return (
     <>
       <RowHeaderContainer> </RowHeaderContainer>
@@ -13,6 +14,6 @@ const ColumnHeader = ({ columns }: ColumnHeader) => {
       ))}
     </>
   );
-};
+});
 
 export default ColumnHeader;
