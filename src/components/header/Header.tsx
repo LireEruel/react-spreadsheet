@@ -25,7 +25,7 @@ const Header = ({ sheetData }: HeaderProps) => {
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.setAttribute("href", url);
-    a.setAttribute("download", "data.csv");
+    a.setAttribute("download", `${fileName}.csv`);
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
