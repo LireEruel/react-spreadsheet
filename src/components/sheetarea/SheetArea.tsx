@@ -8,12 +8,15 @@ import {
   Row,
 } from "./SheetAreaStyles";
 import { useCallback, useState } from "react";
+import { HyperFormula } from "hyperformula";
+import { CellLocation } from "../../types";
 
 type SheetAreaProp = {
   sheetData: string[][];
   setSheetData: (value: string[][]) => void;
+  hfInstance: HyperFormula | null;
 };
-const SheetArea = ({ sheetData, setSheetData }: SheetAreaProp) => {
+const SheetArea = ({ sheetData, setSheetData, hfInstance }: SheetAreaProp) => {
   const [selectedCell, setSelectedCell] = useState("A1");
   const [isEditing, setIsEditing] = useState(false);
   const handleKeyDown = useCallback(
@@ -30,15 +33,19 @@ const SheetArea = ({ sheetData, setSheetData }: SheetAreaProp) => {
     [isEditing]
   );
 
-  const onSelectCell = useCallback((key: string) => {
+  const onSelectCell = (key: string) => {
     setSelectedCell(key);
     setIsEditing(false);
-  }, []);
+  };
 
-  const handleChangedCell = (
-    { x, y }: { x: number; y: number },
-    value: string
-  ) => {
+  const executeFormula = ({ x, y }: CellLocation) => {
+    return hfInstance!.getCellValue({
+      sheet: 0,
+      col: x,
+      row: y,
+    });
+  };
+  const handleChangedCell = ({ x, y }: CellLocation, value: string) => {
     const newSheetData = sheetData.map((row, rowIndex) => {
       if (rowIndex === y) {
         row[x] = value;
@@ -46,36 +53,35 @@ const SheetArea = ({ sheetData, setSheetData }: SheetAreaProp) => {
       return row;
     });
     setSheetData(newSheetData);
+    hfInstance!.setCellContents({ sheet: 0, row: y, col: x }, value);
   };
-
   return (
     <SheetAreaContainer tabIndex={0} onKeyDown={(e) => handleKeyDown(e)}>
       <ColumnHeaderContainer>
         <ColumnHeader />
       </ColumnHeaderContainer>
       <RowContainer>
-        {sheetData.map((row, rowIndex) =>
-          rowIndex == 0 ? null : (
-            <Row key={rowIndex}>
-              <RowHeader row={rowIndex} />
-              {row.map((data, colIndex) => (
-                <Cell
-                  key={`${colIndex}${rowIndex}`}
-                  x={colIndex}
-                  y={rowIndex}
-                  selected={selectedCell === `${colIndex}${rowIndex}`}
-                  isEditing={
-                    selectedCell === `${colIndex}${rowIndex}` && isEditing
-                  }
-                  selectCell={onSelectCell}
-                  setIsEditing={setIsEditing}
-                  value={data}
-                  onChangedValue={handleChangedCell}
-                />
-              ))}
-            </Row>
-          )
-        )}
+        {sheetData.map((row, rowIndex) => (
+          <Row key={rowIndex}>
+            <RowHeader row={rowIndex + 1} />
+            {row.map((data, colIndex) => (
+              <Cell
+                key={`${colIndex}${rowIndex}`}
+                x={colIndex}
+                y={rowIndex}
+                selected={selectedCell === `${colIndex}${rowIndex}`}
+                isEditing={
+                  selectedCell === `${colIndex}${rowIndex}` && isEditing
+                }
+                selectCell={onSelectCell}
+                setIsEditing={setIsEditing}
+                value={data}
+                onChangedValue={handleChangedCell}
+                executeFormula={executeFormula}
+              />
+            ))}
+          </Row>
+        ))}
       </RowContainer>
     </SheetAreaContainer>
   );
