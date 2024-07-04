@@ -5,6 +5,7 @@ export const HeaderContainer = styled.div`
   flex-direction: column;
   padding: 10px;
   gap: 10px;
+  background-color: #f9fbfd;
 `;
 
 export const FileNameInput = styled.input`

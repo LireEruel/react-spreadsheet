@@ -13,11 +13,18 @@ import { CellLocation } from "../../types";
 
 type SheetAreaProp = {
   sheetData: string[][];
-  setSheetData: (value: string[][]) => void;
   hfInstance: HyperFormula | null;
+  selectedCell: [number, number];
+  setSelectedCell: (value: [number, number]) => void;
+  handleChangedCell: ({ x, y }: CellLocation, value: string) => void;
 };
-const SheetArea = ({ sheetData, setSheetData, hfInstance }: SheetAreaProp) => {
-  const [selectedCell, setSelectedCell] = useState("A1");
+const SheetArea = ({
+  sheetData,
+  hfInstance,
+  selectedCell,
+  setSelectedCell,
+  handleChangedCell,
+}: SheetAreaProp) => {
   const [isEditing, setIsEditing] = useState(false);
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
@@ -33,7 +40,7 @@ const SheetArea = ({ sheetData, setSheetData, hfInstance }: SheetAreaProp) => {
     [isEditing]
   );
 
-  const onSelectCell = (key: string) => {
+  const onSelectCell = (key: [number, number]) => {
     setSelectedCell(key);
     setIsEditing(false);
   };
@@ -45,16 +52,7 @@ const SheetArea = ({ sheetData, setSheetData, hfInstance }: SheetAreaProp) => {
       row: y,
     });
   };
-  const handleChangedCell = ({ x, y }: CellLocation, value: string) => {
-    const newSheetData = sheetData.map((row, rowIndex) => {
-      if (rowIndex === y) {
-        row[x] = value;
-      }
-      return row;
-    });
-    setSheetData(newSheetData);
-    hfInstance!.setCellContents({ sheet: 0, row: y, col: x }, value);
-  };
+
   return (
     <SheetAreaContainer tabIndex={0} onKeyDown={(e) => handleKeyDown(e)}>
       <ColumnHeaderContainer>
@@ -69,9 +67,13 @@ const SheetArea = ({ sheetData, setSheetData, hfInstance }: SheetAreaProp) => {
                 key={`${colIndex}${rowIndex}`}
                 x={colIndex}
                 y={rowIndex}
-                selected={selectedCell === `${colIndex}${rowIndex}`}
+                selected={
+                  selectedCell[0] === colIndex && selectedCell[1] === rowIndex
+                }
                 isEditing={
-                  selectedCell === `${colIndex}${rowIndex}` && isEditing
+                  selectedCell[0] === colIndex &&
+                  selectedCell[1] === rowIndex &&
+                  isEditing
                 }
                 selectCell={onSelectCell}
                 setIsEditing={setIsEditing}

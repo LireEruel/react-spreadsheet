@@ -8,7 +8,7 @@ type CellProps = {
   y: number;
   selected: boolean;
   isEditing: boolean;
-  selectCell: (key: string) => void;
+  selectCell: (key: [number, number]) => void;
   setIsEditing: (value: boolean) => void;
   value: string;
   onChangedValue: ({ x, y }: CellLocation, value: string) => void;
@@ -29,10 +29,10 @@ export const Cell = memo(
   }: CellProps) => {
     const inputValueRef = useRef<HTMLInputElement>(null);
     const onClickCell = useCallback(() => {
-      selectCell(`${x}${y}`);
+      selectCell([x, y]);
     }, [selectCell, x, y]);
     const onDoubleClickCell = useCallback(() => {
-      selectCell(`${x}${y}`);
+      selectCell([x, y]);
       setIsEditing(true);
     }, [selectCell, setIsEditing, x, y]);
 
