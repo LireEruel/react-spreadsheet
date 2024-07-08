@@ -12,7 +12,12 @@ const App = () => {
   const [sheetData, setSheetData] = useState(
     Array.from(Array(50), () => Array(26).fill(""))
   );
-  const [selectedCell, setSelectedCell] = useState<[number, number]>([0, 0]);
+  const [selectedCells, setSelectedCells] = useState<
+    [[number, number], [number, number]]
+  >([
+    [0, 0],
+    [0, 0],
+  ]);
   const hfInstanceRef = useRef<HyperFormula | null>(null); // ref로 선언하지 않으면, 렌더링마다 변수가 초기화되기 때문에 ref로 해야 함.
 
   if (hfInstanceRef.current === null) {
@@ -37,15 +42,15 @@ const App = () => {
         <GlobalStyle />
         <Header sheetData={sheetData} />
         <Toolbar
-          selectedCell={selectedCell}
+          selectedCells={selectedCells}
           handleChangedCell={handleChangedCell}
           sheetData={sheetData}
         />
         <SheetArea
           sheetData={sheetData}
           hfInstance={hfInstanceRef.current}
-          selectedCell={selectedCell}
-          setSelectedCell={setSelectedCell}
+          selectedCells={selectedCells}
+          setSelectedCells={setSelectedCells}
           handleChangedCell={handleChangedCell}
         />
       </AppContainer>

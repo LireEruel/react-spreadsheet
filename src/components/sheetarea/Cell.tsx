@@ -2,17 +2,22 @@ import { useCallback, memo, useRef, useEffect } from "react";
 import { EditingCell, CellContainer } from "./SheetAreaStyles";
 import { CellLocation } from "../../types";
 import { CellValue, DetailedCellError } from "hyperformula";
+import { numberToString } from "../util/numberToString";
 
 type CellProps = {
   x: number;
   y: number;
   selected: boolean;
   isEditing: boolean;
-  selectCell: (key: [number, number]) => void;
+  selectCell: (key: [[number, number], [number, number]]) => void;
   setIsEditing: (value: boolean) => void;
   value: string;
   onChangedValue: ({ x, y }: CellLocation, value: string) => void;
   executeFormula: ({ x, y }: CellLocation) => CellValue | DetailedCellError;
+  isDragging: boolean;
+  onMouseDown: ({ x, y }: CellLocation) => void;
+  onMouseOver: ({ x, y }: CellLocation) => void;
+  onMouseUp: () => void;
 };
 
 export const Cell = memo(
@@ -26,19 +31,12 @@ export const Cell = memo(
     value,
     onChangedValue,
     executeFormula,
+    isDragging,
+    onMouseDown,
+    onMouseOver,
+    onMouseUp,
   }: CellProps) => {
     const inputValueRef = useRef<HTMLInputElement>(null);
-    const onClickCell = useCallback(() => {
-      selectCell([x, y]);
-    }, [selectCell, x, y]);
-    const onDoubleClickCell = useCallback(() => {
-      selectCell([x, y]);
-      setIsEditing(true);
-    }, [selectCell, setIsEditing, x, y]);
-
-    const handleEditCell = (e: React.ChangeEvent<HTMLInputElement>) => {
-      onChangedValue({ x, y }, e.target.value);
-    };
 
     const determineDisplay = useCallback(() => {
       if (value.slice(0, 1) === "=") {
@@ -54,6 +52,39 @@ export const Cell = memo(
       }
     }, [executeFormula, value, x, y]);
 
+    const onDoubleClickCell = useCallback(() => {
+      selectCell([
+        [x, y],
+        [x, y],
+      ]);
+      setIsEditing(true);
+    }, [selectCell, setIsEditing, x, y]);
+
+    const handleEditCell = useCallback(
+      (e: React.ChangeEvent<HTMLInputElement>) => {
+        onChangedValue({ x, y }, e.target.value);
+      },
+      [onChangedValue, x, y]
+    );
+
+    const handleMouseDown = useCallback(() => {
+      if (!isDragging) {
+        onMouseDown({ x, y });
+        setIsEditing(false);
+      }
+    }, [isDragging, onMouseDown, setIsEditing, x, y]);
+
+    const handleMouseOver = () => {
+      if (isDragging) {
+        onMouseOver({ x, y });
+      }
+    };
+
+    const handleMouseUp = () => {
+      if (isDragging) {
+        onMouseUp();
+      }
+    };
     useEffect(() => {
       if (isEditing) {
         if (inputValueRef.current !== null) {
@@ -63,7 +94,7 @@ export const Cell = memo(
     }, [isEditing]);
 
     return (
-      <>
+      <div id={`${numberToString(x)}${y}`}>
         {isEditing ? (
           <EditingCell
             type="text"
@@ -74,13 +105,15 @@ export const Cell = memo(
         ) : (
           <CellContainer
             selected={selected}
-            onClick={onClickCell}
             onDoubleClick={onDoubleClickCell}
+            onMouseDown={handleMouseDown}
+            onMouseOver={handleMouseOver}
+            onMouseUp={handleMouseUp}
           >
             {determineDisplay()}
           </CellContainer>
         )}
-      </>
+      </div>
     );
   }
 );

@@ -1,18 +1,22 @@
-import { memo } from "react";
 import { TableCorner, ColumnHeaderItem } from "./SheetAreaStyles";
+import { numberToString } from "../util/numberToString";
 
-const ColumnHeader = memo(() => {
-  const columns = Array.from({ length: 26 }, (_, i) =>
-    String.fromCharCode(65 + i)
-  );
+type ColumnHeaderProps = {
+  isSelectedColumn: (columnIndex: number) => boolean;
+};
+
+const ColumnHeader = ({ isSelectedColumn }: ColumnHeaderProps) => {
+  const columns = Array.from({ length: 26 }, (_, i) => numberToString(i));
   return (
     <>
       <TableCorner> </TableCorner>
-      {columns.map((col) => (
-        <ColumnHeaderItem key={col}>{col}</ColumnHeaderItem>
+      {columns.map((col, colIndex) => (
+        <ColumnHeaderItem key={col} selected={isSelectedColumn(colIndex)}>
+          {col}
+        </ColumnHeaderItem>
       ))}
     </>
   );
-});
+};
 
 export default ColumnHeader;

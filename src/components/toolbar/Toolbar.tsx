@@ -2,42 +2,42 @@ import { CellInput, NameBox, ToolbarContainer } from "./ToolbarStyles";
 import { useEffect, useState } from "react";
 import { CellLocation } from "../../types";
 import FormulaIcon from "../../assets/formula.svg?react";
+import { numberToString } from "../util/numberToString";
 
 type ToolbarProps = {
-  selectedCell: [number, number];
+  selectedCells: [[number, number], [number, number]];
   handleChangedCell: ({ x, y }: CellLocation, value: string) => void;
   sheetData: string[][];
 };
 const Toolbar = ({
-  selectedCell,
+  selectedCells,
   handleChangedCell,
   sheetData,
 }: ToolbarProps) => {
-  const selectedCellKey =
-    String.fromCharCode(65 + selectedCell[0]) + (selectedCell[1] + 1);
-
-  const [selectedCellValue, setSelectedCellValue] = useState<string | number>(
+  const selectedCellsKey =
+    numberToString(selectedCells[0][0]) + (selectedCells[0][1] + 1);
+  const [selectedCellsValue, setSelectedCellsValue] = useState<string | number>(
     ""
   );
 
   useEffect(() => {
-    setSelectedCellValue(sheetData[selectedCell[1]][selectedCell[0]]);
-  }, [selectedCell, sheetData]);
+    setSelectedCellsValue(sheetData[selectedCells[0][1]][selectedCells[0][0]]);
+  }, [selectedCells, sheetData]);
 
   const handleEditCell = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedCellValue(e.target.value);
+    setSelectedCellsValue(e.target.value);
     handleChangedCell(
-      { x: selectedCell[0], y: selectedCell[1] },
+      { x: selectedCells[0][0], y: selectedCells[0][1] },
       e.target.value
     );
   };
 
   return (
     <ToolbarContainer>
-      <NameBox>{selectedCellKey}</NameBox>
+      <NameBox>{selectedCellsKey}</NameBox>
       <FormulaIcon width="17" height="17" />
       <CellInput
-        value={selectedCellValue}
+        value={selectedCellsValue}
         onChange={handleEditCell}
         tabIndex={0}
         contentEditable={true}
