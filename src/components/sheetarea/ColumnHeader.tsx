@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { RowHeaderContainer, ColumnHeaderItem } from "./SheetAreaStyles";
+import { TableCorner, ColumnHeaderItem } from "./SheetAreaStyles";
 
 const ColumnHeader = memo(() => {
   const columns = Array.from({ length: 26 }, (_, i) =>
@@ -7,7 +7,7 @@ const ColumnHeader = memo(() => {
   );
   return (
     <>
-      <RowHeaderContainer> </RowHeaderContainer>
+      <TableCorner> </TableCorner>
       {columns.map((col) => (
         <ColumnHeaderItem key={col}>{col}</ColumnHeaderItem>
       ))}

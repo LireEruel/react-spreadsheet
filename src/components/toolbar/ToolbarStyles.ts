@@ -9,7 +9,7 @@ export const ToolbarContainer = styled.div`
 
 export const NameBox = styled.span`
   width: 5rem;
-  border-right: 1px solid #dadce0;
+  border-right: 1px solid ${(props) => props.theme.colors.gray[300]};
 `;
 
 export const CellInput = styled.input`
@@ -17,7 +17,7 @@ export const CellInput = styled.input`
   font-weight: normal;
   text-decoration: none;
   font-style: normal;
-  color: #1f1f1f;
+  color: ${(props) => props.theme.colors.gray[800]};
   font-family: Google Sans, Roboto, sans-serif;
   height: calc(100% - 2px);
   margin-top: 2px;

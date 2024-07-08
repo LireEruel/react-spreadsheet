@@ -5,6 +5,8 @@ import { AppContainer, GlobalStyle } from "./AppStyles";
 import { useRef, useState } from "react";
 import { HyperFormula } from "hyperformula";
 import { CellLocation } from "./types";
+import { ThemeProvider } from "styled-components";
+import { theme } from "./assets/theme";
 
 const App = () => {
   const [sheetData, setSheetData] = useState(
@@ -30,22 +32,24 @@ const App = () => {
   };
 
   return (
-    <AppContainer>
-      <GlobalStyle />
-      <Header sheetData={sheetData} />
-      <Toolbar
-        selectedCell={selectedCell}
-        handleChangedCell={handleChangedCell}
-        sheetData={sheetData}
-      />
-      <SheetArea
-        sheetData={sheetData}
-        hfInstance={hfInstanceRef.current}
-        selectedCell={selectedCell}
-        setSelectedCell={setSelectedCell}
-        handleChangedCell={handleChangedCell}
-      />
-    </AppContainer>
+    <ThemeProvider theme={theme}>
+      <AppContainer>
+        <GlobalStyle />
+        <Header sheetData={sheetData} />
+        <Toolbar
+          selectedCell={selectedCell}
+          handleChangedCell={handleChangedCell}
+          sheetData={sheetData}
+        />
+        <SheetArea
+          sheetData={sheetData}
+          hfInstance={hfInstanceRef.current}
+          selectedCell={selectedCell}
+          setSelectedCell={setSelectedCell}
+          handleChangedCell={handleChangedCell}
+        />
+      </AppContainer>
+    </ThemeProvider>
   );
 };
 

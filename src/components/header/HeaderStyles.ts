@@ -5,33 +5,34 @@ export const HeaderContainer = styled.div`
   flex-direction: column;
   padding: 10px;
   gap: 10px;
-  background-color: #f9fbfd;
+  background-color: ${(props) => props.theme.colors.slate[50]};
 `;
 
 export const FileNameInput = styled.input`
   visibility: visible;
-  width: 193px;
+  width: 220px;
   background: none;
   border-radius: 4px !important;
   padding: 1px 6px;
-  color: gray;
+  color: ${(props) => props.theme.colors.gray[600]};
   border: 1px solid transparent;
   font-size: 18px;
   font-variant-ligatures: no-contextual;
-  height: 20px;
-  line-height: 22px;
+  height: 22px;
+  line-height: 18px;
   margin: 0;
   min-width: 1px;
+  box-sizing: border-box;
   &:focus {
-    border: 2px solid #0b57d0 !important;
+    border: 2px solid ${(props) => props.theme.colors.blue[600]} !important;
     border-radius: 4px !important;
     box-shadow: none;
-    color: #1f1f1f;
+    color: ${(props) => props.theme.colors.gray[800]};
     margin: 0 -1px;
     outline: none;
   }
   &:hover {
-    border: 2px solid gray;
+    border: 1px solid ${(props) => props.theme.colors.gray[600]};
   }
 `;
 
@@ -48,7 +49,7 @@ export const FileButton = styled.button`
   border: 1px solid transparent;
   border-radius: 4px;
   box-shadow: none;
-  color: #202124;
+  color: ${(props) => props.theme.colors.gray[800]};
   cursor: pointer;
   font-size: 14px;
   letter-spacing: 0.2px;
@@ -57,6 +58,6 @@ export const FileButton = styled.button`
   font-size: 1rem;
 
   &:hover {
-    background-color: #e8ebee;
+    background-color: ${(props) => props.theme.colors.gray[200]};
   }
 `;

@@ -14,6 +14,10 @@ export const GlobalStyle = createGlobalStyle`
     padding: 0;
     height: 100%;
     width: 100%;
+    color: ${(props) => props.theme.colors.gray[900]};
+    font-weight: 400;
+    font-size: 11px;
+    font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
   }
 
   #root {
