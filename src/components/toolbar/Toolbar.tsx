@@ -1,4 +1,8 @@
-import { CellInput, NameBox, ToolbarContainer } from "./ToolbarStyles";
+import {
+  CellInput,
+  NameBox,
+  ToolbarContainer,
+} from "../../styles/ToolbarStyles";
 import { useEffect, useState } from "react";
 import { CellLocation } from "../../types";
 import FormulaIcon from "../../assets/formula.svg?react";

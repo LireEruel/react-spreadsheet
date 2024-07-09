@@ -1,6 +1,6 @@
 import { transparentize } from "polished";
 import styled from "styled-components";
-import { SelectionInfo } from "./SheetArea";
+import { SelectionInfo } from "../components/sheetarea/SheetArea";
 export const SheetAreaContainer = styled.div`
   flex: 1;
   display: flex;

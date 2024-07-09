@@ -1,5 +1,5 @@
 import { useCallback, memo, useRef, useEffect } from "react";
-import { EditingCell, CellContainer } from "./SheetAreaStyles";
+import { EditingCell, CellContainer } from "../../styles/SheetAreaStyles";
 import { CellLocation } from "../../types";
 import { CellValue, DetailedCellError } from "hyperformula";
 import { numberToString } from "../util/numberToString";

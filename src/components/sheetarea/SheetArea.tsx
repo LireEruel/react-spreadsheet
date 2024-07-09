@@ -7,7 +7,7 @@ import {
   RowContainer,
   Row,
   Selection,
-} from "./SheetAreaStyles";
+} from "../../styles/SheetAreaStyles";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { HyperFormula } from "hyperformula";
 import { CellLocation } from "../../types";

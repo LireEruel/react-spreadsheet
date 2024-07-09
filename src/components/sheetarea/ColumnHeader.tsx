@@ -1,4 +1,4 @@
-import { TableCorner, ColumnHeaderItem } from "./SheetAreaStyles";
+import { TableCorner, ColumnHeaderItem } from "../../styles/SheetAreaStyles";
 import { numberToString } from "../util/numberToString";
 
 type ColumnHeaderProps = {

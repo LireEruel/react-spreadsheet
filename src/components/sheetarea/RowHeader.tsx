@@ -1,4 +1,4 @@
-import { RowHeaderContainer } from "./SheetAreaStyles";
+import { RowHeaderContainer } from "../../styles/SheetAreaStyles";
 type RowHeaderProp = {
   row: number;
   selected: boolean;

@@ -4,7 +4,7 @@ import {
   FileNameInput,
   FileButton,
   ButtonsContainer,
-} from "./HeaderStyles";
+} from "../../styles/HeaderStyles";
 
 type HeaderProps = {
   sheetData: string[][];
