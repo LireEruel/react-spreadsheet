@@ -12,6 +12,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { HyperFormula } from "hyperformula";
 import { CellLocation } from "../../types";
 import { numberToString } from "../util/numberToString";
+import { transparentize } from "polished";
+import { theme } from "../../assets/theme";
 
 type SheetAreaProp = {
   sheetData: string[][];
@@ -26,7 +28,7 @@ export type SelectionInfo = {
   top: number;
   width: number;
   height: number;
-  isTransparentBackground: boolean;
+  background: string;
 };
 
 const SheetArea = ({
@@ -126,9 +128,11 @@ const SheetArea = ({
         Math.max(startCellElement.top, endCellElement.top) -
         Math.min(startCellElement.top, endCellElement.top) +
         startCellElement.height,
-      isTransparentBackground:
+      background:
         selectedCells[0][0] === selectedCells[1][0] &&
-        selectedCells[0][1] === selectedCells[1][1],
+        selectedCells[0][1] === selectedCells[1][1]
+          ? "transparent"
+          : transparentize(0.8, theme.colors.blue[600]),
     };
 
     setSelectionInfo(newSelectionInfo);
@@ -186,7 +190,7 @@ const SheetArea = ({
           height={selectionInfo.height}
           top={selectionInfo.top}
           left={selectionInfo.left}
-          isTransparentBackground={selectionInfo.isTransparentBackground}
+          background={selectionInfo.background}
         />
       ) : null}
     </SheetAreaContainer>

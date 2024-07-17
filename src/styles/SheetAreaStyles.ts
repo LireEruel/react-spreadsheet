@@ -114,10 +114,7 @@ export const CellContainer = styled.div<CellContainerProps>`
 
 export const Selection = styled.div<SelectionInfo>`
   position: absolute;
-  background-color: ${(props) =>
-    props.isTransparentBackground
-      ? "transparent"
-      : transparentize(0.8, props.theme.colors.blue[600])};
+  background-color: ${(props) => props.background};
   top: ${(props) => props.top}px;
   left: ${(props) => props.left}px;
   width: ${(props) => props.width}px;
