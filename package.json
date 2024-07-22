@@ -11,7 +11,10 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@types/lodash": "^4.17.7",
     "hyperformula": "^2.7.0",
+    "i": "^0.3.7",
+    "lodash": "^4.17.21",
     "polished": "^4.3.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

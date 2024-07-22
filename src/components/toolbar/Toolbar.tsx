@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { CellLocation } from "../../types";
 import FormulaIcon from "../../assets/formula.svg?react";
 import { numberToString } from "../util/numberToString";
+import { getSheetDataValue } from "../util/getSheetDataValue";
 
 type ToolbarProps = {
   selectedCells: [[number, number], [number, number]];
@@ -25,7 +26,9 @@ const Toolbar = ({
   );
 
   useEffect(() => {
-    setSelectedCellsValue(sheetData[selectedCells[0][1]][selectedCells[0][0]]);
+    setSelectedCellsValue(
+      getSheetDataValue(sheetData, selectedCells[0][0], selectedCells[0][1])
+    );
   }, [selectedCells, sheetData]);
 
   const handleEditCell = (e: React.ChangeEvent<HTMLInputElement>) => {

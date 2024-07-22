@@ -10,17 +10,21 @@ import {
 } from "../../styles/SheetAreaStyles";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { HyperFormula } from "hyperformula";
-import { CellLocation } from "../../types";
+import { CellLocation, SheetData } from "../../types";
 import { numberToString } from "../util/numberToString";
 import { transparentize } from "polished";
 import { theme } from "../../assets/theme";
+import { handleCtrlEvent } from "../../hooks/useKeyboardEvents";
+import { times } from "lodash";
+import { getSheetDataValue } from "../util/getSheetDataValue";
 
 type SheetAreaProp = {
-  sheetData: string[][];
+  sheetData: SheetData;
   hfInstance: HyperFormula | null;
   selectedCells: [[number, number], [number, number]];
   setSelectedCells: (value: [[number, number], [number, number]]) => void;
   handleChangedCell: ({ x, y }: CellLocation, value: string) => void;
+  setSheetData: (newSheetData: SheetData) => void;
 };
 
 export type SelectionInfo = {
@@ -37,25 +41,40 @@ const SheetArea = ({
   selectedCells,
   setSelectedCells,
   handleChangedCell,
+  setSheetData,
 }: SheetAreaProp) => {
   const SheetAreaContainerRef = useRef<HTMLDivElement>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [selectionInfo, setSelectionInfo] = useState<SelectionInfo>();
-  const handleKeyDown = useCallback(
-    (event: React.KeyboardEvent) => {
-      const { key, ctrlKey, altKey, metaKey } = event;
-      // 예외 키 필터링
-      const isSpecialKey =
-        ctrlKey || altKey || metaKey || (key >= "F1" && key <= "F12");
-
-      if (!isEditing && !isSpecialKey) {
-        setIsEditing(true);
-      }
-    },
-    [isEditing]
-  );
-
   const [isDragging, setIsDragging] = useState(false);
+
+  const checkToggleEditingMode = ({
+    key,
+    ctrlKey,
+    altKey,
+    metaKey,
+  }: {
+    key: string;
+    ctrlKey: boolean;
+    altKey: boolean;
+    metaKey: boolean;
+  }) => {
+    const isSpecialKey =
+      ctrlKey || altKey || metaKey || (key >= "F1" && key <= "F12");
+
+    if (!isEditing && !isSpecialKey) {
+      setIsEditing(true);
+    }
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    const { key, ctrlKey, altKey, metaKey } = event;
+    // 예외 키 필터링
+    checkToggleEditingMode({ key, ctrlKey, altKey, metaKey });
+    if (ctrlKey && hfInstance !== null) {
+      handleCtrlEvent({ event, hfInstance, selectedCells, setSheetData });
+    }
+  };
 
   const handleMouseDown = ({ x, y }: CellLocation) => {
     setSelectedCells([
@@ -153,7 +172,37 @@ const SheetArea = ({
         <ColumnHeader isSelectedColumn={isSelectedColumn} />
       </ColumnHeaderContainer>
       <RowContainer>
-        {sheetData.map((row, rowIndex) => (
+        {times(100, (rowIndex: number) => (
+          <Row key={rowIndex}>
+            <RowHeader row={rowIndex + 1} selected={isSelectedRow(rowIndex)} />
+            {times(29, (colIndex: number) => (
+              <Cell
+                key={`${colIndex}${rowIndex}`}
+                x={colIndex}
+                y={rowIndex}
+                selected={
+                  selectedCells[0][0] === colIndex &&
+                  selectedCells[0][1] === rowIndex
+                }
+                isEditing={
+                  selectedCells[0][0] === colIndex &&
+                  selectedCells[0][1] === rowIndex &&
+                  isEditing
+                }
+                selectCell={onSelectCell}
+                setIsEditing={setIsEditing}
+                value={getSheetDataValue(sheetData, colIndex, rowIndex)}
+                onChangedValue={handleChangedCell}
+                executeFormula={executeFormula}
+                onMouseDown={handleMouseDown}
+                onMouseOver={handleMouseOver}
+                onMouseUp={handleMouseUp}
+                isDragging={isDragging}
+              />
+            ))}
+          </Row>
+        ))}
+        {/* {sheetData.map((row, rowIndex) => (
           <Row key={rowIndex}>
             <RowHeader row={rowIndex + 1} selected={isSelectedRow(rowIndex)} />
             {row.map((data, colIndex) => (
@@ -182,7 +231,7 @@ const SheetArea = ({
               />
             ))}
           </Row>
-        ))}
+        ))} */}
       </RowContainer>
       {selectionInfo ? (
         <Selection

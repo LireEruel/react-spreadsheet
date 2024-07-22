@@ -7,11 +7,10 @@ import { HyperFormula } from "hyperformula";
 import { CellLocation } from "./types";
 import { ThemeProvider } from "styled-components";
 import { theme } from "./assets/theme";
+import { cloneDeep } from "lodash";
 
 const App = () => {
-  const [sheetData, setSheetData] = useState(
-    Array.from(Array(50), () => Array(26).fill(""))
-  );
+  const [sheetData, setSheetData] = useState([[""]]);
   const [selectedCells, setSelectedCells] = useState<
     [[number, number], [number, number]]
   >([
@@ -26,12 +25,13 @@ const App = () => {
   }
 
   const handleChangedCell = ({ x, y }: CellLocation, value: string) => {
-    const newSheetData = sheetData.map((row, rowIndex) => {
-      if (rowIndex === y) {
-        row[x] = value;
-      }
-      return row;
-    });
+    const newSheetData = cloneDeep(sheetData);
+    if (!newSheetData[y]) {
+      newSheetData[y] = [];
+      newSheetData[y][x] = value;
+    } else {
+      newSheetData[y][x] = value;
+    }
     setSheetData(newSheetData);
     hfInstanceRef.current!.setCellContents({ sheet: 0, row: y, col: x }, value);
   };
@@ -52,6 +52,7 @@ const App = () => {
           selectedCells={selectedCells}
           setSelectedCells={setSelectedCells}
           handleChangedCell={handleChangedCell}
+          setSheetData={setSheetData}
         />
       </AppContainer>
     </ThemeProvider>

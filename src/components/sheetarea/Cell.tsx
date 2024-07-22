@@ -1,7 +1,7 @@
 import { useCallback, memo, useRef, useEffect } from "react";
 import { EditingCell, CellContainer } from "../../styles/SheetAreaStyles";
 import { CellLocation } from "../../types";
-import { CellValue, DetailedCellError } from "hyperformula";
+import { CellValue, DetailedCellError, RawCellContent } from "hyperformula";
 import { numberToString } from "../util/numberToString";
 
 type CellProps = {
@@ -11,7 +11,7 @@ type CellProps = {
   isEditing: boolean;
   selectCell: (key: [[number, number], [number, number]]) => void;
   setIsEditing: (value: boolean) => void;
-  value: string;
+  value: RawCellContent;
   onChangedValue: ({ x, y }: CellLocation, value: string) => void;
   executeFormula: ({ x, y }: CellLocation) => CellValue | DetailedCellError;
   isDragging: boolean;
@@ -39,16 +39,17 @@ export const Cell = memo(
     const inputValueRef = useRef<HTMLInputElement>(null);
 
     const determineDisplay = useCallback(() => {
-      if (value.slice(0, 1) === "=") {
+      if (value && typeof value == "string" && value.slice(0, 1) === "=") {
         const res = executeFormula({ x, y });
         //파싱에 실패한 경우
         if (typeof res === "object") {
           return "ERROR! ";
         } else {
-          return res;
+          return res.toString();
         }
       } else {
-        return value;
+        if (value == null || value == "undefined") return "";
+        return value?.toString();
       }
     }, [executeFormula, value, x, y]);
 
@@ -98,7 +99,7 @@ export const Cell = memo(
         {isEditing ? (
           <EditingCell
             type="text"
-            value={value}
+            value={value ? value.toString() : ""}
             onChange={handleEditCell}
             ref={inputValueRef}
           />
