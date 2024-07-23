@@ -8,8 +8,10 @@ import { CellLocation } from "./types";
 import { ThemeProvider } from "styled-components";
 import { theme } from "./assets/theme";
 import { cloneDeep } from "lodash";
+import { getFileName } from "./components/util/getFileName";
 
 const App = () => {
+  const [fileName, setFileName] = useState("");
   const [sheetData, setSheetData] = useState([[""]]);
   const [selectedCells, setSelectedCells] = useState<
     [[number, number], [number, number]]
@@ -38,9 +40,14 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
+      <title>{getFileName(fileName)}</title>
       <AppContainer>
         <GlobalStyle />
-        <Header sheetData={sheetData} />
+        <Header
+          sheetData={sheetData}
+          fileName={fileName}
+          setFileName={setFileName}
+        />
         <Toolbar
           selectedCells={selectedCells}
           handleChangedCell={handleChangedCell}
