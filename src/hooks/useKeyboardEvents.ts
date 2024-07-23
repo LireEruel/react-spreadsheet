@@ -17,6 +17,16 @@ const handleCopyCells = (
   });
 };
 
+const handleCutCells = (
+  hfInstance: HyperFormula,
+  selectedCells: [[number, number], [number, number]]
+) => {
+  hfInstance.cut({
+    start: { sheet: 0, col: selectedCells[0][0], row: selectedCells[0][1] },
+    end: { sheet: 0, col: selectedCells[1][0], row: selectedCells[1][1] },
+  });
+};
+
 const handlePasteCells = (
   hfInstance: HyperFormula,
   selectedCells: [[number, number], [number, number]],
@@ -44,12 +54,14 @@ export const handleCtrlEvent = ({
   setSheetData,
 }: handleCtrlEventProps) => {
   const { key } = event;
-  switch (key) {
+
+  const normalizedKey = key.toLowerCase();
+  switch (normalizedKey) {
     case "c":
       handleCopyCells(hfInstance, selectedCells);
       break;
-    case "C":
-      handleCopyCells(hfInstance, selectedCells);
+    case "x":
+      handleCutCells(hfInstance, selectedCells);
       break;
     case "v":
       handlePasteCells(hfInstance, selectedCells, setSheetData);
