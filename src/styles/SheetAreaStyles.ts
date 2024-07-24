@@ -17,6 +17,10 @@ export const TableCorner = styled.div`
   border-width: 1px 5px 5px 1px;
   flex-shrink: 0;
   box-sizing: border-box;
+  position: sticky;
+  z-index: 4;
+  background-color: white;
+  left: 0;
 `;
 
 export const ColumnHeaderContainer = styled.div`
@@ -46,9 +50,7 @@ export const RowHeaderContainer = styled.div<RowHeaderContainer>`
   width: 50px;
   height: ${(props) => props.theme.size.cell.height};
   background-color: ${(props) =>
-    props.selected
-      ? transparentize(0.8, props.theme.colors.blue[600])
-      : "transparent"};
+    props.selected ? props.theme.colors.blue[200] : "white"};
   text-align: center;
   line-height: ${(props) => props.theme.size.cell.height};
   position: sticky;
@@ -58,6 +60,7 @@ export const RowHeaderContainer = styled.div<RowHeaderContainer>`
   border-width: 0 1px 1px 0;
   box-sizing: border-box;
   user-select: none;
+  z-index: 3;
 `;
 type ColumnHeaderItemProps = {
   selected: boolean;

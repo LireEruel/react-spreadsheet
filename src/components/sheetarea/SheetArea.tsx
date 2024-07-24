@@ -133,12 +133,25 @@ const SheetArea = ({
       )!
       .getBoundingClientRect();
 
+    const scrollLeft =
+      SheetAreaContainerRef.current?.scrollLeft != undefined
+        ? SheetAreaContainerRef.current?.scrollLeft
+        : 0;
+
+    const scrollTop =
+      SheetAreaContainerRef.current?.scrollTop != undefined
+        ? SheetAreaContainerRef.current?.scrollTop
+        : 0;
+
     const newSelectionInfo: SelectionInfo = {
       left:
         Math.min(startCellElement.left, endCellElement.left) -
-        tableElement.left,
+        tableElement.left +
+        scrollLeft,
       top:
-        Math.min(startCellElement.top, endCellElement.top) - tableElement.top,
+        Math.min(startCellElement.top, endCellElement.top) -
+        tableElement.top +
+        scrollTop,
       width:
         Math.max(startCellElement.left, endCellElement.left) -
         Math.min(startCellElement.left, endCellElement.left) +
@@ -151,7 +164,7 @@ const SheetArea = ({
         selectedCells[0][0] === selectedCells[1][0] &&
         selectedCells[0][1] === selectedCells[1][1]
           ? "transparent"
-          : transparentize(0.8, theme.colors.blue[600]),
+          : transparentize(0.8, theme.colors.blue[300]),
     };
 
     setSelectionInfo(newSelectionInfo);
