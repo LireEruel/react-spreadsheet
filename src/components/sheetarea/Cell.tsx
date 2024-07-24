@@ -2,7 +2,7 @@ import { useCallback, memo, useRef, useEffect } from "react";
 import { EditingCell, CellContainer } from "../../styles/SheetAreaStyles";
 import { CellLocation } from "../../types";
 import { CellValue, DetailedCellError, RawCellContent } from "hyperformula";
-import { numberToString } from "../util/numberToString";
+import { numberToString } from "../../util/numberToString";
 
 type CellProps = {
   x: number;

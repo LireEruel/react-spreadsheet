@@ -11,12 +11,12 @@ import {
 import { useCallback, useEffect, useRef, useState } from "react";
 import { HyperFormula } from "hyperformula";
 import { CellLocation, SheetData } from "../../types";
-import { numberToString } from "../util/numberToString";
+import { numberToString } from "../../util/numberToString";
 import { transparentize } from "polished";
 import { theme } from "../../assets/theme";
 import { handleCtrlEvent } from "../../hooks/useKeyboardEvents";
 import { times } from "lodash";
-import { getSheetDataValue } from "../util/getSheetDataValue";
+import { getSheetDataValue } from "../../util/getSheetDataValue";
 
 type SheetAreaProp = {
   sheetData: SheetData;
@@ -175,7 +175,7 @@ const SheetArea = ({
         {times(100, (rowIndex: number) => (
           <Row key={rowIndex}>
             <RowHeader row={rowIndex + 1} selected={isSelectedRow(rowIndex)} />
-            {times(29, (colIndex: number) => (
+            {times(26, (colIndex: number) => (
               <Cell
                 key={`${colIndex}${rowIndex}`}
                 x={colIndex}
@@ -202,36 +202,6 @@ const SheetArea = ({
             ))}
           </Row>
         ))}
-        {/* {sheetData.map((row, rowIndex) => (
-          <Row key={rowIndex}>
-            <RowHeader row={rowIndex + 1} selected={isSelectedRow(rowIndex)} />
-            {row.map((data, colIndex) => (
-              <Cell
-                key={`${colIndex}${rowIndex}`}
-                x={colIndex}
-                y={rowIndex}
-                selected={
-                  selectedCells[0][0] === colIndex &&
-                  selectedCells[0][1] === rowIndex
-                }
-                isEditing={
-                  selectedCells[0][0] === colIndex &&
-                  selectedCells[0][1] === rowIndex &&
-                  isEditing
-                }
-                selectCell={onSelectCell}
-                setIsEditing={setIsEditing}
-                value={data}
-                onChangedValue={handleChangedCell}
-                executeFormula={executeFormula}
-                onMouseDown={handleMouseDown}
-                onMouseOver={handleMouseOver}
-                onMouseUp={handleMouseUp}
-                isDragging={isDragging}
-              />
-            ))}
-          </Row>
-        ))} */}
       </RowContainer>
       {selectionInfo ? (
         <Selection

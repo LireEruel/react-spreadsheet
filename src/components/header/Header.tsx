@@ -5,7 +5,7 @@ import {
   FileButton,
   ButtonsContainer,
 } from "../../styles/HeaderStyles";
-import { getFileName } from "../util/getFileName";
+import { getFileName } from "../../util/getFileName";
 import { FocusEvent } from "react";
 
 type HeaderProps = {

@@ -1,5 +1,5 @@
 import { TableCorner, ColumnHeaderItem } from "../../styles/SheetAreaStyles";
-import { numberToString } from "../util/numberToString";
+import { numberToString } from "../../util/numberToString";
 
 type ColumnHeaderProps = {
   isSelectedColumn: (columnIndex: number) => boolean;

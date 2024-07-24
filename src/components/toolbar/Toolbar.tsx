@@ -6,8 +6,8 @@ import {
 import { useEffect, useState } from "react";
 import { CellLocation } from "../../types";
 import FormulaIcon from "../../assets/formula.svg?react";
-import { numberToString } from "../util/numberToString";
-import { getSheetDataValue } from "../util/getSheetDataValue";
+import { numberToString } from "../../util/numberToString";
+import { getSheetDataValue } from "../../util/getSheetDataValue";
 
 type ToolbarProps = {
   selectedCells: [[number, number], [number, number]];

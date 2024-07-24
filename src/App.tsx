@@ -8,7 +8,7 @@ import { CellLocation } from "./types";
 import { ThemeProvider } from "styled-components";
 import { theme } from "./assets/theme";
 import { cloneDeep } from "lodash";
-import { getFileName } from "./components/util/getFileName";
+import { getFileName } from "./util/getFileName";
 
 const App = () => {
   const [fileName, setFileName] = useState("");
