@@ -3,13 +3,19 @@ import { numberToString } from "../../util/numberToString";
 
 type ColumnHeaderProps = {
   isSelectedColumn: (columnIndex: number) => boolean;
+  col: number;
+  handleSelectAllCells: () => void;
 };
 
-const ColumnHeader = ({ isSelectedColumn }: ColumnHeaderProps) => {
-  const columns = Array.from({ length: 26 }, (_, i) => numberToString(i));
+const ColumnHeader = ({
+  isSelectedColumn,
+  col,
+  handleSelectAllCells,
+}: ColumnHeaderProps) => {
+  const columns = Array.from({ length: col }, (_, i) => numberToString(i));
   return (
     <>
-      <TableCorner> </TableCorner>
+      <TableCorner onClick={handleSelectAllCells}> </TableCorner>
       {columns.map((col, colIndex) => (
         <ColumnHeaderItem key={col} selected={isSelectedColumn(colIndex)}>
           {col}

@@ -60,6 +60,8 @@ const App = () => {
           setSelectedCells={setSelectedCells}
           handleChangedCell={handleChangedCell}
           setSheetData={setSheetData}
+          row={100}
+          col={26}
         />
       </AppContainer>
     </ThemeProvider>

@@ -25,6 +25,8 @@ type SheetAreaProp = {
   setSelectedCells: (value: [[number, number], [number, number]]) => void;
   handleChangedCell: ({ x, y }: CellLocation, value: string) => void;
   setSheetData: (newSheetData: SheetData) => void;
+  row: number;
+  col: number;
 };
 
 export type SelectionInfo = {
@@ -42,6 +44,8 @@ const SheetArea = ({
   setSelectedCells,
   handleChangedCell,
   setSheetData,
+  row,
+  col,
 }: SheetAreaProp) => {
   const SheetAreaContainerRef = useRef<HTMLDivElement>(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -120,6 +124,13 @@ const SheetArea = ({
     );
   };
 
+  const handleSelectAllCells = () => {
+    setSelectedCells([
+      [0, 0],
+      [col - 1, row - 1],
+    ]);
+  };
+
   const calculateSelectionStyle = useCallback(() => {
     const tableElement = SheetAreaContainerRef.current!.getBoundingClientRect();
     const startCellElement = document
@@ -182,10 +193,14 @@ const SheetArea = ({
       ref={SheetAreaContainerRef}
     >
       <ColumnHeaderContainer>
-        <ColumnHeader isSelectedColumn={isSelectedColumn} />
+        <ColumnHeader
+          isSelectedColumn={isSelectedColumn}
+          col={col}
+          handleSelectAllCells={handleSelectAllCells}
+        ></ColumnHeader>
       </ColumnHeaderContainer>
       <RowContainer>
-        {times(100, (rowIndex: number) => (
+        {times(row, (rowIndex: number) => (
           <Row key={rowIndex}>
             <RowHeader row={rowIndex + 1} selected={isSelectedRow(rowIndex)} />
             {times(26, (colIndex: number) => (
