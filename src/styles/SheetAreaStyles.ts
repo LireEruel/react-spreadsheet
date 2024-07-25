@@ -18,9 +18,10 @@ export const TableCorner = styled.div`
   flex-shrink: 0;
   box-sizing: border-box;
   position: sticky;
-  z-index: 4;
+  z-index: 5;
   background-color: white;
   left: 0;
+  top: 0;
 `;
 
 export const ColumnHeaderContainer = styled.div`
@@ -28,7 +29,7 @@ export const ColumnHeaderContainer = styled.div`
   position: sticky;
   top: 0;
   background: white;
-  z-index: 1;
+  z-index: 4;
   width: 100%;
   box-sizing: border-box;
 `;
